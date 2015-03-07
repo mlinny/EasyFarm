@@ -18,7 +18,6 @@ You should have received a copy of the GNU General Public License
 ///////////////////////////////////////////////////////////////////
 
 using FFACETools;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,7 +28,7 @@ namespace ZeroLimits.XITool.Classes
     /// add method is used. 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class LimitedQueue<T> : ConcurrentQueue<T>
+    public class LimitedQueue<T> : Queue<T>
     {
         /// <summary>
         /// The maximum limit the queue can hold. 
@@ -55,11 +54,8 @@ namespace ZeroLimits.XITool.Classes
         {
             lock (mutex)
             {
-                // Used to discard an element. 
-                T discard; 
-
                 // Remove the oldest value when limit is reached. 
-                if (Count >= Limit) this.TryDequeue(out discard);
+                if (Count > Limit) this.Dequeue();
 
                 // Add value to end.
                 this.Enqueue(value);
